@@ -4,7 +4,7 @@ author: "Emma"
 format: html
 ---
 
-## Header 1
+## R setup
 
 ```{r setup}
 library(tidyverse)
@@ -12,7 +12,7 @@ library(here)
 library(snakecase)
 ```
 
-## Importing new data
+## Importing new data (15)
 to_snake_case makes it more reable, so none of the coloums are in uppercase. 
 n_max determines how many row are loaded from this file
 ```{r}
@@ -24,7 +24,7 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886626/HR.csv.gz") |>
   )
 ```
 
-## Exercise: Reading another file
+## Exercise: Reading another file (15)
 
 ```{r}
 here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") %>%
@@ -52,7 +52,18 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") %>%
   )
 ```
 
+##Bundling code into functions (16)
 
 ```{r}
-# Code chunk
+#' Add two number together
+#'
+#' @param num1 A number here
+#' @param num2 A number here
+#'
+#' @returns Returns the sum of two numbers
+#'
+add_numbers <- function(num1, num2) {
+  added <- num1 + num2
+  return(added)
+}
 ```
