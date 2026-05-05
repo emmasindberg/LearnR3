@@ -10,6 +10,7 @@ format: html
 library(tidyverse)
 library(here)
 library(snakecase)
+source(here("R/functions.R"))
 ```
 
 ## Importing new data (15)
@@ -65,25 +66,6 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") %>%
 add_numbers <- function(num1, num2) {
   added <- num1 + num2
   return(added)
-}
-```
-
-Makeing a function, that makes it possible to load the data
-```{r}
-#' Read in one nurses stress data file
-#'
-#' @param file_path a path to a datafile
-#' @param max_rows default maximum row of 100 if no other specifications are set
-#'
-#' @returns dataframe/tibble
-read <- function(file_path, max_rows = 100) {
-  data <- file_path |>
-    readr::read_csv(
-      show_col_types = FALSE,
-      name_repair = to_snake_case,
-      n_max = max_rows
-    )
-  return(data)
 }
 ```
 
