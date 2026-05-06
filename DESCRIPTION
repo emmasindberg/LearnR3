@@ -6,8 +6,12 @@ Encoding: UTF-8
 URL: https://github.com/emmasindberg/LearnR3
 BugReports: https://github.com/emmasindberg/LearnR3/issues
 Imports: 
+    dplyr,
+    fs,
     here,
+    purrr,
     readr,
-    snakecase
+    snakecase,
+    stringr
 Depends: 
     tidyverse
