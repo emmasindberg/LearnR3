@@ -4,7 +4,7 @@
 #' @param max_rows default maximum row of 100 if no other specifications are set
 #'
 #' @returns dataframe/tibble
-read <- function(file_path, max_rows = 100) {
+read <- function(file_path, max_rows = 5) {
   data <- file_path |>
     readr::read_csv(
       show_col_types = FALSE,
@@ -12,4 +12,43 @@ read <- function(file_path, max_rows = 100) {
       n_max = max_rows
     )
   return(data)
+}
+
+#' Read all `.csv.gz` files in the `stress/` folder into one data frame.
+#'
+#' @param filename The name of files in the sub-folders that we
+#'    want to read in.
+#'
+#' @returns A single data frame/tibble.
+#'
+read_all <- function(filename) {
+  files <- here::here("data-raw/nurses-stress/") |>
+    fs::dir_ls(regexp = filename, recurse = TRUE)
+
+  data <- files |>
+    purrr::map(read) |>
+    purrr::list_rbind(names_to = "file_path_id")
+
+  return(data)
+}
+
+#' Get the participant ID from the file path column.
+#'
+#' @param data Data with `file_path_id` column.
+#'
+#' @returns A data frame/tibble.
+#'
+get_participant_id <- function(data) {
+  data_with_id <- data |>
+    dplyr::mutate(
+      id = stringr::str_extract(
+        file_path_id,
+        "/stress/[:alnum:]{2}/"
+      ) |>
+        stringr::str_remove("/stress/") |>
+        stringr::str_remove("/"),
+      .before = file_path_id
+    ) |>
+    dplyr::select(-file_path_id)
+  return(data_with_id)
 }
