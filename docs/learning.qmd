@@ -5,11 +5,12 @@ format: html
 ---
 
 ## R setup
-
+FS package is good to find files in your project
 ```{r setup}
 library(tidyverse)
 library(here)
 library(snakecase)
+library(fs)
 source(here("R/functions.R"))
 ```
 
@@ -95,4 +96,20 @@ here("data-raw/nurses-stress/stress/5C/5C_1586886712/HR.csv.gz") |>
   read(max_rows = Inf)
 ```
 
-##Making robust and reusable functions (17)
+##Using Map
+recurse means that it looks in all the folders, and if there is a folder in a folder it also looks in that one
+```{r}
+hr_files <- here("data-raw/nurses-stress/stress/") %>%
+  dir_ls(regexp = "HR.csv.gz", recurse = TRUE)
+
+hr_files
+
+hr_data <- hr_files %>%
+  map(read)
+
+hr_data <- hr_files %>%
+  map(read) %>%
+  list_rbind(names_to = "file_path_id")
+
+hr_data
+```
