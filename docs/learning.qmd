@@ -11,6 +11,9 @@ library(tidyverse)
 library(here)
 library(snakecase)
 library(fs)
+library(dplyr)
+library(stringr)
+library()
 source(here("R/functions.R"))
 ```
 
@@ -188,9 +191,78 @@ get_participant_id <- function(data) {
 ## Working with across
 
 ```{r}
-hr_data = read_all("HR.csv.gz") %>% 
-  get_participant_id
+hr_data <- read_all("HR.csv.gz") %>%
+  get_participant_id()
 
-
+hr_data
 ```
 
+```{r}
+hr_data %>%
+  summarise(across(
+    where(is.numeric),
+    list(
+      mean = mean,
+      median = median,
+      sd = sd
+    )
+  ))
+```
+
+## Working with dates
+
+```{r}
+hr_data %>%
+  mutate(
+    datetime = round_date(collection_datetime, unit = "minute"),
+    .before = "collection_datetime"
+  )
+```
+
+## Summerizing by groups
+```{r}
+hr_data %>%
+  mutate(
+    collection_datetime = round_date(
+      collection_datetime,
+      unit = "minute"
+    )
+  ) %>%
+  summarise(
+    across(
+      where(is.numeric),
+      list(
+        mean = mean,
+        sd = sd,
+        median = median
+      )
+    ),
+    .by = c(id, collection_datetime)
+  )
+```
+
+##Exercise: Convert the summarising code into a function (20)
+```{r}
+#| eval: false
+summarise_by_datetime <- function(data) {
+  summarised_data <- data |>
+    dplyr::mutate(
+      collection_datetime = lubridate::round_date(
+        collection_datetime,
+        unit = "minute"
+      )
+    ) %>%
+    dplyr::summarise(
+      dplyr::across(
+        tidyselect::where(is.numeric),
+        list(
+          mean = mean,
+          sd = sd,
+          median = median
+        )
+      ),
+      .by = c(id, collection_datetime)
+    )
+  return(summarised_data)
+}
+```
