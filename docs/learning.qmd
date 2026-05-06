@@ -57,6 +57,7 @@ here("data-raw/nurses-stress/stress/6B/6B_1587569373/EDA.csv.gz") %>%
 ##Bundling code into functions (16)
 
 ```{r}
+#| eval: false
 #' Add two number together
 #'
 #' @param num1 A number here
@@ -116,6 +117,7 @@ hr_data
 
 #### Exercise: Convert map to function and use on sleep. (18)
 ```{r}
+#| eval: false
 #' Read all `.csv.gz` files in the `stress/` folder into one data frame.
 #'
 #' @param filename The name of files in the sub-folders that we
@@ -166,6 +168,7 @@ hr_data %>%
 ##Exercise: Convert ‘get ID’ code into a function (19)
 
 ```{r}
+#| eval: false
 get_participant_id <- function(data) {
   data_with_id <- data |>
     dplyr::mutate(
@@ -181,3 +184,13 @@ get_participant_id <- function(data) {
   return(data_with_id)
 }
 ```
+
+## Working with across
+
+```{r}
+hr_data = read_all("HR.csv.gz") %>% 
+  get_participant_id
+
+
+```
+
