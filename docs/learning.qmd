@@ -266,3 +266,27 @@ summarise_by_datetime <- function(data) {
   return(summarised_data)
 }
 ```
+
+## Piviting your data between long and wide format
+We want to make a long format for the survey date, to we can merge our data
+```{r}
+survey_data = here("data-raw/nurses-stress/survey-results.csv.gz") %>% 
+  read()
+
+survey_data
+
+```
+Make the date from character format to date format
+as.date need year, month, date
+```{r}
+survey_tidy = survey_data %>% 
+  mutate(date = mdy(date),
+         start_datetime = as_datetime(paste(date, start_time)),
+         end_datetime = as_datetime(paste(date, end_time)),
+         datetime_id = start_datetime,
+         .before = start_time) %>% 
+  select(-c(start_time, date, end_time, duration))
+
+survey_tidy
+```
+
